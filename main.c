@@ -16,12 +16,13 @@ int main(void) {
     tbstd_init(env.dict, TBCORE | TBMATH);
 
     // lookup words in dictionary that we will use
-    struct word *lit, *add, *mul, *ret, *exit, *add2;
+    struct word *lit, *add, *mul, *ret, *exit, *bnot, *add2;
     lit = dict_lookup(env.dict, "lit");
     add = dict_lookup(env.dict, "+");
     mul = dict_lookup(env.dict, "*");
     ret = dict_lookup(env.dict, "ret");
     exit = dict_lookup(env.dict, "exit");
+    bnot = dict_lookup(env.dict, "~");
 
     // this is the "data" for the add2 word, which will be accessed via add2's interpreter.
     // every word consists of an interpreter function ref and data pointer.
@@ -36,7 +37,7 @@ int main(void) {
     // interpreter. "docol" simply pushes the current instruction pointer to
     // the return stack, and then loads the word's "data" field into the instruction
     // pointer before running the next word.
-    // .
+    // 
     // the inverse of "docol" (roughly the "call" op in most ISAs) is "ret", which pops a value
     // from the top of the return stack and loads it into the instruction pointer. 
     // ..
@@ -47,7 +48,8 @@ int main(void) {
     // in FORTH: 1 add2 2 * 
     struct word *program[] = {
         LIT(1), add2,
-        LIT(2), mul, exit
+        LIT(2), mul, 
+        LIT(0), bnot, exit
     };
 
     // load the program into the virtual machine and call NEXT (really a macro), which fetches the

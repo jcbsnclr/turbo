@@ -158,7 +158,7 @@ static struct tbstd_worddef tbcore[] = {
     { NULL }
 };
 
-// tbmath - mathematical operations. integer values only currently
+// tbmath - mathematical and boolean operations. integer values only currently
 #define TBBINOP(name, op) \
     static void name (struct env *env, void *data) { \
         (void)data; \
@@ -172,18 +172,70 @@ static struct tbstd_worddef tbcore[] = {
         NEXT(env); \
     }
 
+#define TBUNOP(name, op) \
+    static void name (struct env *env, void *data) { \
+        (void)data; \
+        bool error; \
+        uint64_t v; \
+        v = stack_pop(&env->vs, &error); \
+        assert(!error); \
+        stack_push(&env->vs, op v, &error); \
+        assert(!error); \
+        NEXT(env); \
+    }
+
 TBBINOP(add_impl, +)
 TBBINOP(sub_impl, -)
 TBBINOP(mul_impl, *)
 TBBINOP(div_impl, /)
 TBBINOP(mod_impl, %)
 
+TBBINOP(and_impl, &&)
+TBBINOP(or_impl, ||)
+TBBINOP(gt_impl, >)
+TBBINOP(lt_impl, <)
+TBBINOP(ge_impl, >=)
+TBBINOP(le_impl, <=)
+TBBINOP(eq_impl, ==)
+
+TBBINOP(band_impl, &)
+TBBINOP(bor_impl, |)
+TBBINOP(bxor_impl, ^)
+
+TBUNOP(not_impl, !)
+TBUNOP(bnot_impl, ~)
+TBUNOP(neg_impl, -)
+
 static struct tbstd_worddef tbmath[] = {
+    // binary ops
+    //    arithmetic
     { .name = "+", .impl = add_impl },
     { .name = "-", .impl = sub_impl },
     { .name = "*", .impl = mul_impl },
     { .name = "/", .impl = div_impl },
     { .name = "%", .impl = mod_impl },
+
+    //    logic
+    { .name = "&&", .impl = and_impl },
+    { .name = "||", .impl = or_impl },
+    { .name = ">",  .impl = gt_impl },
+    { .name = "<",  .impl = lt_impl },
+    { .name = ">=", .impl = ge_impl },
+    { .name = "<=", .impl = le_impl },
+    { .name = "=",  .impl = eq_impl },
+
+    //    binary logic
+    { .name = "&", .impl = band_impl },
+    { .name = "|", .impl = bor_impl },
+    { .name = "^", .impl = bxor_impl },
+
+    // unary ops
+    //    logical and binary not
+    { .name = "!",  .impl = not_impl },
+    { .name = "~", .impl = bnot_impl },
+    //    arithmetic negate
+    { .name = "neg", .impl = neg_impl },
+
     { NULL }
 };
 
