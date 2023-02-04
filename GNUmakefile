@@ -3,7 +3,7 @@ CC?=gcc
 CSRC:=$(wildcard *.c)
 COBJ:=$(patsubst %.c, %.c.o, $(CSRC))
 
-CFLAGS+=-c -MMD -Og -g -Wall -Werror -Wextra -I. -std=c2x
+CFLAGS+=-c -MMD -Og -g -Wall -Werror -Wextra -I.
 LFLAGS+=
 
 BIN=turbo
