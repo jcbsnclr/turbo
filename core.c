@@ -94,14 +94,3 @@ void docol(struct env *env, void *data) {
     env->ip = (struct word **)data;
     NEXT(env);
 }
-
-void ret(struct env *env, void *data) {
-    (void)data;
-    bool error;
-
-    env->ip = (struct word **)stack_pop(&env->rs, &error);
-
-    assert(!error);
-
-    NEXT(env);
-}

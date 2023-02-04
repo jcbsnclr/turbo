@@ -113,6 +113,17 @@ static void drop_impl(struct env *env, void *data) {
     NEXT(env);
 }
 
+static void ret_impl(struct env *env, void *data) {
+    (void)data;
+    bool error;
+
+    env->ip = (struct word **)stack_pop(&env->rs, &error);
+
+    assert(!error);
+
+    NEXT(env);
+}
+
 static void exit_impl(struct env *env, void *data) {
     (void)data;
 
@@ -141,6 +152,7 @@ static struct tbstd_worddef tbcore[] = {
     { .name = "rot",  .impl = rot_impl },
     { .name = "drop", .impl = drop_impl },
 
+    { .name = "ret",  .impl = ret_impl },
     { .name = "exit", .impl = exit_impl },
 
     { NULL }
