@@ -1,5 +1,6 @@
 #include <stack.h>
 #include <core.h>
+#include <tbstd.h>
 
 #include <stdio.h>
 #include <assert.h>
@@ -10,6 +11,8 @@
 int main(void) {
     struct env env;
     env_init(&env, 0x1000);
+
+    tbstd_init(env.dict, TBCORE | TBMATH);
 
     struct word *lit, *add, *exit;
 

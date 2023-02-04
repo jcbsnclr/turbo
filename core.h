@@ -51,3 +51,5 @@ void dict_free(struct dict *dict);
 
 void dict_define(struct dict *dict, char *name, wordimpl_t impl, void *data, cleanup_t cleanup);
 struct word *dict_lookup(struct dict *dict, char *name);
+
+void docol(struct env *env, void *data);
